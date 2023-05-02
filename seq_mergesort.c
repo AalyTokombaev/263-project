@@ -9,6 +9,9 @@ void printArray(int *arr, int size) {
 
 void merge(int* arr, int start, int middle, int end) {
     // this will later be parallelzed
+
+    //  prints for debugging, I'll keep them here in case I'll need to debug again later.
+    /*
     printf("In merge\n");
     printf("start: %d, middle: %d, end: %d\n", start, middle, end);
     printf("part arr: ");
@@ -19,6 +22,7 @@ void merge(int* arr, int start, int middle, int end) {
     printf("arr: ");
     printArray(arr, 14);
     printf("\n");
+    */
 
 
     int size_l = middle - start + 1; // size of left array we want to merge;
@@ -71,6 +75,9 @@ void merge(int* arr, int start, int middle, int end) {
 
 
 void mergeSort(int *arr, int start, int end) {
+
+    //  prints for debugging, I'll keep them here in case I'll need to debug again later.
+    /*
     printf("in mergesort\n");
     printf("start: %d, end: %d\n", start, end);
     printf("part arr: ");
@@ -81,6 +88,7 @@ void mergeSort(int *arr, int start, int end) {
     printf("arr: ");
     printArray(arr, 14);
     printf("\n");
+    */
 
 
 
