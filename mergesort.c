@@ -3,10 +3,11 @@
 #include <omp.h>
 #include "merge.c"
 
-void printArray(int *arr, int size) {
-    for (int i = 0; i < size; i++) {
+void printArray(int *arr, int start, int end) {
+    for (int i = start; i < end; i++) {
         printf("%d ", arr[i]); 
     }
+    printf("\n");
 }
 
 
@@ -25,7 +26,6 @@ void mergeSort(int *arr, int start, int end) {
     printArray(arr, 14);
     printf("\n");
     */
-
     if (start < end) {
         // find the middle and mergesort the left and right
         int middle = start + (end - start) / 2;
@@ -40,22 +40,4 @@ void mergeSort(int *arr, int start, int end) {
 
 
 // I mean merge sort is quote simple
-int main(){
-    int arr[14] = {2, 1, 3, 6, 5, 4, 1, 2, 9, 8, 8, 7, 1, 2};
-
-    printf("arr before sort: ");
-    printArray(arr, 14);
-    printf("\n");
-
-    mergeSort(arr, 0, 13); // 13 because of 0 indexing, I'm so fuckign stupid
-    printf("arr after sort: ");
-    printArray(arr, 14);
-    printf("\n");
-    
-    return 0;
-
-}
-
-
-// p: start index, r = end index 
 // mergesort interval [p, r]

@@ -21,188 +21,186 @@ int max(int a, int b) {
     }
 }
 
-void paraMerge(int *arr, int start, int mid, int end) {
+void pmerge(int *arr, int start, int mid, int end) {
+    printf("at the very start of pmerge:: start: %d, mid: %d, end: %d\n", start, mid, end);
+    
+
+    
+
+
+    // let's do some base cases 
+
 
     // I think we'll have to pass in a shared array here to collet the results;
 
-
+    
+    printf("running pmerge with array: \n");
     // print original aray
-    printf("original array: ");
-    for (int i = start; i < end; i++) {
+    printf("original array part: ");
+    for (int i = start; i < end+ 1; i++) {
         printf(" %d ", arr[i]);
     }
+    printf("\n");
+    printf("and start: %d, mid: %d, end: %d\n", start, mid, end);
+    printf("************************\n");
 
 
     // I'm just gonna assume they're sorted 
 
     // first we need to define the arrays A and B
     int size_A = mid - start + 1; // size of left array we want to merge;
-    int size_B = end  - mid; // size of right array we want to merge;
+    int size_B = end - mid; // size of right array we want to merge;
+
+    printf("size_A: %d, size_B: %d\n", size_A, size_B);
+
+    // let's do some cases
 
 
-    int *left = malloc(sizeof(int*) * size_A);
-    int *right = malloc(sizeof(int*) * size_B);
-
-    // copy the elements into the arrays
-    for (int i = 0; i < size_A; i++) {
-        left[i] = arr[start + i];
+    // case 1: size_A == size_B == 1
+    if (end + 1 - start == 2) {
+        printf("in the case where size_A == size_B == 1\n");
+        if (arr[start] > arr[end]) {
+            int temp = arr[start];
+            arr[start] = arr[end];
+            arr[end] = temp;
+        }
+        printf("--------case end run--------\n");
+        return;
     }
-    for (int j = 0; j < size_B; j++) {
-        right[j] = arr[mid + 1  + j];
+
+    if (end == mid) {
+        printf("===in the case where end == mid===\n");
+        return;
     }
-
-    // print right and left 
-    printf("array A: "); 
-    printArray(left, size_A);
-
-    printf("array B: ");
-    printArray(right, size_B);
-
-    // maybe we could do odd/even sorting here 
     
-    // Do I even need this?
-    // split A into odd indices and even indices
+    // case 2: size_A == 1 and size_B == 0
+    if (size_A == 1 && size_B  == 0)  {
+        printf("in the case where size_A == 1 and size_B == 0\n");
+        return;
+    }
+    if (size_A == 0 && size_B == 1) {
+        printf("in the case where size_A == 0 and size_B == 1\n");
+
+        return;
+    }
+
+    // now that we've done the base cases we should have two sorted arrays A and B 
+    int *A = (int *)malloc(size_A * sizeof(int));
+    int *B = (int *)malloc(size_B * sizeof(int));
+    
+    
+    int j = 0;
+    for (int i = start; i < mid + 1; i++) {
+        A[j] = arr[i];
+        j++;
+    }
+    j = 0;
+    for (int i = mid + 1; i < end + 1; i++) {
+        B[j] = arr[i];
+        j++;
+    }
+
+    printf("A: ");
+    printArray(A, 0, size_A);
+
+    printf("B: ");
+    printArray(B, 0, size_B);
+
+    // find even a_i and even b_i
+    /* If the length of the array is odd, then the ammount of evens will be one larger than the ammount of odds */
     int size_even_A = size_A / 2;
-    if (size_even_A % 2 == 1) {
+    if (size_A % 2 != 0) {
         size_even_A++;
     }
-    int rest_A = size_A - size_even_A;
-
-    // hey I coild do this in parallel!
-    int *A_even = malloc(sizeof(int*) * size_even_A);
-    int *A_odd = malloc(sizeof(int*) * (rest_A));
-
-    // print even and odd A 
-    print("A_even: ");
-    printArray(A_even, size_even_A);
-    print("A_odd: ");
-    printArray(A_odd, rest_A);
-
-
-
-    // for even a_i
-    int j = 0;
-    for (int i = 0; i < size_A; i++) {
-        if (i % 2 == 0) {
-            A_even[j] = left[i];
-            j++;
-        }
-    }
-
-    // for odd a_i
-    j = 0;
-    for (int i = 0; i < size_A; i++) {
-        if (i % 2 == 1) {
-            A_odd[j] = left[i];
-            j++;
-        }
-    }
-
-    // i don't know if I need this
     int size_even_B = size_B / 2;
-    if (size_even_B % 2 == 1) {
+    if (size_B % 2 != 0) {
         size_even_B++;
     }
-    int rest_B = size_B - size_even_B;
 
-    int *B_even = malloc(sizeof(int*) * size_even_B);
-    int *B_odd = malloc(sizeof(int*) * rest_B);
+
+    printf("size_even_A: %d, size_even_B: %d\n", size_even_A, size_even_B);
+
+
+    // No we can find the even a's and b's 
+
+    int *evens = malloc((size_even_A + size_even_B) * sizeof(int*));
+
+    // int *even_A = malloc(size_even_A * sizeof(int*));
+    // int *even_B = malloc(size_even_B * sizeof(int*));
     
-    // for even b_i
+    int size_odd_A = size_A - size_even_A;
+    int size_odd_B = size_B - size_even_B;
+
+    int size_odd = size_odd_A + size_odd_B;
+    int *odds = malloc(size_odd * sizeof(int*));
+
+    // int *odd_A = malloc((size_A - size_even_A) * sizeof(int*));
+    // int *odd_B = malloc((size_B - size_even_B) * sizeof(int*));
+
+
+    // Fill up the odd and even arrays
+    j = 0;
+    for (int i = 0; i < size_A; i++) {
+        if (i % 2 == 0) {
+            evens[j] = A[i];
+            j++;
+        } else {
+            odds[j - 1] = A[i];
+        }
+    }
+
     j = 0;
     for (int i = 0; i < size_B; i++) {
         if (i % 2 == 0) {
-            B_even[j] = right[i];
+            evens[j + size_even_A ] = B[i];
             j++;
+        } else {
+            printf("%d, %d, %d\n", i, B[i], j-1);
+            odds[j - 1 + size_odd_A] = B[i];
         }
     }
 
-    // for odd b_i
-    j = 0;
-    for (int i = 0; i < size_B; i++) {
-        if (i % 2 == 1) {
-            B_odd[j] = right[i];
-            j++;
+    printf("evens: ");
+    printArray(evens, 0, size_even_A + size_even_B);
+    printf("odds: ");
+    printArray(odds, 0, size_odd_A + size_odd_B);
+
+    // merge evens and odds 
+
+    int mi = size_even_A + size_even_B;
+    pmerge(evens, 0, mi /2  , size_even_A + size_even_B - 1);
+    printf("heww0...?\n");
+    printArray(evens, 0, size_even_A + size_even_B);
+
+    mi = size_odd_A + size_odd_B;
+
+    pmerge(odds, mi/2, mi - 1, size_odd_A + size_odd_B - 1);
+    printf("heww0...? for B!!!!\n");
+    printArray(odds, 0, size_odd_A + size_odd_B);
+
+
+
+    int *e = malloc((end+1) * sizeof(int*));
+
+    e[0] = evens[0];
+    for (int i = 1; i < end; i += 2) {
+        if (evens[i+1] < odds[i+1]){
+            e[i] = evens[i+1];
+            e[i+1] = odds[i];
+        } else {
+            e[i] = odds[i];
+            e[i+1] = evens[i+1];
         }
-    }
-
-    //print even and odd B
-    print("B_even: ");
-    printArray(B_even, size_even_B);
-    print("B_odd: ");
-    printArray(B_odd, rest_B);
-
-    // now that we have the arrays, we can merge A_even and B_even
     
-    int size_C = size_even_A + size_even_B;
-    int *C = malloc(sizeof(int*) * size_C);
-
-    // merge A_even and B_even
-    int i = 0;
-    int k = 0;
-    int l = 0;
-    while (i < size_C) {
-        if (A_even[k] < B_even[l]) {
-            C[i] = A_even[k];
-            k++;
-        } else {
-            C[i] = B_even[l];
-            l++;
-        }
-        i++;
     }
 
+    printf("%d\n", odds[size_odd - 1]);
+    e[end-1] = odds[size_odd - 1];
 
+    printf("e: ");
+    printArray(e, 0, end);
 
-    int size_D = rest_A + rest_B;
-    int *D = malloc(sizeof(int*) * size_D);
-
-    // merge A_odd and B_odd
-    i = 0;
-    k = 0;
-    l = 0;
-    while (i < size_D) {
-        if (A_odd[k] < B_odd[l]) {
-            D[i] = A_odd[k];
-            k++;
-        } else {
-            D[i] = B_odd[l];
-            l++;
-        }
-        i++;
-    }
-    //finally let's print C and D
-    print("C: ");
-    printArray(C, size_C);
-    print("D: ");
-    printArray(D, size_D);
-
-    int e = size_C + size_D; // size of the original array (I hope)
-    int *E = malloc(sizeof(int*) * e);
-    // set E[0] to be C[0]
-    E[0] = C[0];
-
-    for (int i = 1; i < e - 1; i++){
-        if (i % 2 == 0) {
-            E[i] = min(C[i + 1], D[i]);
-        } else {
-            E[i] = max(C[i + 1], D[i]);
-        }
-    }
-
-    // set last element of E to be last element of D 
-    E[e - 1] = D[size_D - 1];
-
-    // let's print E
-    printf("array E: ");
-    printArray(E, e);
-
-    // finally let's copy E into the original array
-    for (int i = 0; i < e; i++) {
-        arr[start + i] = E[i];
-    }
-
-    // God I hope this works
+    printf("--------------------- run end ----------------\n");
 
 
 }
