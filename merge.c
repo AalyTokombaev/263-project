@@ -62,4 +62,5 @@ void merge(int* arr, int start, int middle, int end) {
         k++;
     }
     // should work
+    
 }
