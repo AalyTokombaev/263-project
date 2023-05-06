@@ -25,7 +25,8 @@ void pmergeSort(int *arr, int start, int end) {
     if (start < end) {
         // find the middle and mergesort the left and right
         // int middle = start + (end - start) / 2;
-        int middle = (start + end) / 2;
+        int middle  = start + (end - start)/ 2;
+        // int middle = (start + end) / 2;
 
         // print start middle and end
         printf("start: %d, middle: %d, end: %d\n", start, middle, end);
