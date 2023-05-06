@@ -233,18 +233,40 @@ void pmerge(int *arr, int start, int mid, int end) {
     }
     
 
+
+
+     /* 
+        I'm so dumb 
+        I'm so dumb 
+        I'm so dumb 
+        I'm so dumb 
+        I'm so dumb 
+        I'm so dumb 
+        I'm so dumb 
+        I'm so dumb 
+        I'm so dumb 
+        I'm so dumb 
+
+        my loops don't work because size of D and C are not equal to end 
+     */
     arr[start] = evens[0];
-    for (int i = 0; i < end - 1; i+=2){
+    for (int i = 1; i < end; i+=2){
         printf("i = %d\n", i);
+        printf("evens: ");
+        printArray(evens, 0, size_even);
+        printf("odds: ");
+        printArray(odds, 0, size_odd);
         printArray(arr, start, end + 1);
 
-        if (evens[i + 1] < odds[i]){
-            arr[start + i] = evens[i  + 1];
-            arr[start + i + 1] = odds[i];
+        printf("evens[i] : %d, odds[i-1] : %d\n", evens[i], odds[i-1]);
+        if (evens[i] < odds[i-1]){
+            printf("first condition\n");
+            arr[start + i - 1] = evens[i];
+            arr[start + i] = odds[i-1];
         }
         else {
-            arr[start + i + 1] = evens[i  + 1];
-            arr[start + i] = odds[i];
+            arr[start + i] = evens[i];
+            arr[start + i - 1] = odds[i - 1];
         }
 
         printArray(arr, start, end + 1);
