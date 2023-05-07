@@ -162,7 +162,6 @@ void pmerge(int *arr, int start, int mid, int end) {
     }
     
 
-    # pragma omp for
     for (int i = 1; i < size_even; i++){
         int e = 2*i;
         int o = 2*i - 1;
