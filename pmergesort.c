@@ -29,7 +29,7 @@ void pmergeSort(int *arr, int start, int end) {
         // int middle = (start + end) / 2;
 
         // print start middle and end
-        printf("start: %d, middle: %d, end: %d\n", start, middle, end);
+        // printf("start: %d, middle: %d, end: %d\n", start, middle, end);
         pmergeSort(arr, start, middle);
         pmergeSort(arr, middle + 1, end);
         // parallel region goes here ;) 
