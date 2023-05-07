@@ -249,32 +249,37 @@ void pmerge(int *arr, int start, int mid, int end) {
 
         my loops don't work because size of D and C are not equal to end 
      */
+    # pragma omp for
+    for (int i = 1; i < size_even; i++){
+        printf("i=%d\n", i);
+        printArray(arr, start, end+1);
+        int e = 2*i;
+        int o = 2*i - 1;
+        printf("e: %d and o: %d\n", e, o);
+        arr[start + e] = max(evens[i], odds[i - 1]);
+        arr[start + o] = min(evens[i], odds[i - 1]);
+        printArray(arr, start, end+1);
+    }
+
     arr[start] = evens[0];
-    for (int i = 1; i < end; i+=2){
-        printf("i = %d\n", i);
+    arr[end] = odds[size_odd-1];
+    /*
+    for (int i = 1; i < size_even; i++){
+        printf("i:%d\n", i);
+        printArray(arr, start, end + 1);
         printf("evens: ");
         printArray(evens, 0, size_even);
         printf("odds: ");
         printArray(odds, 0, size_odd);
-        printArray(arr, start, end + 1);
-
-        printf("evens[i] : %d, odds[i-1] : %d\n", evens[i], odds[i-1]);
-        if (evens[i] < odds[i-1]){
-            printf("first condition\n");
-            arr[start + i - 1] = evens[i];
-            arr[start + i] = odds[i-1];
+        if (i % 2 == 0){
+            arr[start + i] = min(evens[i], odds[i - 1]);
+        } else {
+            arr[start + i + 1] = max(evens[i], odds[i - 1]);
         }
-        else {
-            arr[start + i] = evens[i];
-            arr[start + i - 1] = odds[i - 1];
-        }
-
         printArray(arr, start, end + 1);
-
     }
+    */
 
-
-    arr[end] = odds[size_odd-1];
     printf("done doing the e shit!\n");
 
 

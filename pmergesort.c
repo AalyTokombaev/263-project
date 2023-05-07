@@ -3,7 +3,7 @@
 #include <omp.h>
 #include "pmerge.c"
 
-#define SIZE 8
+#define SIZE 16
 
 void pmergeSort(int *arr, int start, int end) {
 
@@ -40,7 +40,7 @@ void pmergeSort(int *arr, int start, int end) {
 
 // I mean merge sort is quote simple
 int main(){
-    int arr[SIZE] = {1, 3, 2, 6, 4, 5, 8, 7};
+    int arr[SIZE] = {1, 3, 2, 6, 4, 5, 8, 7, 10, 9, 12, 11, 14, 13, 16, 15};
 
     printf("arr before sort: ");
     printArray(arr, 0, SIZE);
