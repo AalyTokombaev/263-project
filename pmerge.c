@@ -233,22 +233,6 @@ void pmerge(int *arr, int start, int mid, int end) {
     }
     
 
-
-
-     /* 
-        I'm so dumb 
-        I'm so dumb 
-        I'm so dumb 
-        I'm so dumb 
-        I'm so dumb 
-        I'm so dumb 
-        I'm so dumb 
-        I'm so dumb 
-        I'm so dumb 
-        I'm so dumb 
-
-        my loops don't work because size of D and C are not equal to end 
-     */
     # pragma omp for
     for (int i = 1; i < size_even; i++){
         printf("i=%d\n", i);
@@ -263,23 +247,7 @@ void pmerge(int *arr, int start, int mid, int end) {
 
     arr[start] = evens[0];
     arr[end] = odds[size_odd-1];
-    /*
-    for (int i = 1; i < size_even; i++){
-        printf("i:%d\n", i);
-        printArray(arr, start, end + 1);
-        printf("evens: ");
-        printArray(evens, 0, size_even);
-        printf("odds: ");
-        printArray(odds, 0, size_odd);
-        if (i % 2 == 0){
-            arr[start + i] = min(evens[i], odds[i - 1]);
-        } else {
-            arr[start + i + 1] = max(evens[i], odds[i - 1]);
-        }
-        printArray(arr, start, end + 1);
-    }
-    */
-
+    
     printf("done doing the e shit!\n");
 
 
