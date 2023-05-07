@@ -19,27 +19,11 @@ int min(int a, int b){
 
 void pmerge(int *arr, int start, int mid, int end) {
     // I think we'll have to pass in a shared array here to collet the results;
-    
-    // print original aray
         
 
-    // I'm just gonna assume they're sorted 
-
     // first we need to define the arrays A and B
-
     int size_A = mid - start + 1;
     int size_B = end - mid;
-    /*
-    if ((end - start + 1) % 2 == 0) {
-        size_A = mid - start; // size of left array we want to merge;
-        size_B = end - mid + 1; // size of right array we want to merge;
-    } else {
-        size_A = mid - start + 1; // size of left array we want to merge;
-        size_B = end - mid; // size of right array we want to merge;
-    }
-    */
-
-
     // let's do some cases
 
 
@@ -148,11 +132,6 @@ void pmerge(int *arr, int start, int mid, int end) {
     pmerge(odds, 0 , mi - 1, size_odd - 1);
 
 
-
-
-
-
-
     if (size_even == 2 && size_odd == 2) {
         arr[start] = evens[0];
         arr[start + 1] = min(evens[1], odds[0]);
@@ -172,6 +151,4 @@ void pmerge(int *arr, int start, int mid, int end) {
     arr[start] = evens[0];
     arr[end] = odds[size_odd-1];
     
-
-
 }
