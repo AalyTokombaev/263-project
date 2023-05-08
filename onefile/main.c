@@ -222,10 +222,10 @@ void pmerge(int *arr, int start, int mid, int end) {
     j = 0;
     for (int i = 0; i < size_A; i++) {
         if (i % 2 == 0) {
-            evens[j] = A[i];
+            evens[j] = arr[i];
             j++;
         } else {
-            odds[j - 1] = A[i];
+            odds[j - 1] = arr[i];
         }
     }
     
@@ -233,11 +233,11 @@ void pmerge(int *arr, int start, int mid, int end) {
     j = 0;
     for (int i = 0; i < size_B; i++) {
         if (i % 2 == 0) {
-            evens[j + size_even_A ] = B[i];
+            evens[j + size_even_A ] = arr[i + size_A];
             j++;
         } else {
             // printf("%d, %d, %d\n", i, B[i], j-1);
-            odds[j - 1 + size_odd_A] = B[i];
+            odds[j - 1 + size_odd_A] = arr[i + size_A];
         }
     }
 
@@ -292,14 +292,18 @@ void pmergeSort(int *arr, int start, int end) {
 
 
 int main(int argc, char **argv){
-    if (argc < 2) {
-        printf("Usage: ./pmergeSort <size of array>\n");
+    if (argc < 3) {
+        printf("Usage: ./pmergeSort <size of array> <number of threads>\n");
         return 1;
     }
 
     
 
     int SIZE = atoi(argv[1]);
+    int num_threads = atoi(argv[2]);
+
+    omp_set_num_threads(num_threads);
+
     int *arr = malloc(SIZE * sizeof(int));
     for (int i = 0; i < SIZE; i++) {
         arr[i] = genrand64_int64() % INT32_MAX;
@@ -346,7 +350,7 @@ int main(int argc, char **argv){
         }
     }
 
-    printf("array sorted: %s\n", sorted ? "true" : "false");
+    printf("PARALLELarray sorted: %s\n", sorted ? "true" : "false");
     printf("parallel time: %f\n", parallel_end - parallel_start);
     /* End of parallel sort */
 
