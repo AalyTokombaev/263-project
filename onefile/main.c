@@ -168,10 +168,11 @@ void pmerge(int *arr, int start, int mid, int end) {
     }
 
     // now that we've done the base cases we should have two sorted arrays A and B 
-    int *A = (int *)malloc(size_A * sizeof(int));
-    int *B = (int *)malloc(size_B * sizeof(int));
+    //int *A = (int *)malloc(size_A * sizeof(int));
+    //int *B = (int *)malloc(size_B * sizeof(int));
     
-    
+
+    /*  
     int j = 0;
     for (int i = start; i < mid + 1; i++) {
         A[j] = arr[i];
@@ -182,7 +183,7 @@ void pmerge(int *arr, int start, int mid, int end) {
         B[j] = arr[i];
         j++;
     }
-
+    */
 
     // find even a_i and even b_i
     /* If the length of the array is odd, then the ammount of evens will be one larger than the ammount of odds */
@@ -219,6 +220,33 @@ void pmerge(int *arr, int start, int mid, int end) {
 
 
     // Fill up the odd and even arrays
+
+
+    // let's try again 
+    int j = 0;
+    // getting the even indexed elements from A
+    for (int i = start; i < mid + 1; i++) {
+        if (j % 2 == 0) {
+            evens[j] = arr[start + i];
+        } else {
+            odds[j] = arr[start + i];
+        }
+        j++;
+    }
+
+    // and do the same for the B part 
+    for (int i = mid + 1; i < end + 1; i++) {
+        if (j % 2 == 0) {
+            evens[j] = arr[start + i];
+        } else {
+            odds[j] = arr[start + i];
+        }
+        j++;
+    }
+
+
+
+    /*
     j = 0;
     for (int i = 0; i < size_A; i++) {
         if (i % 2 == 0) {
@@ -240,6 +268,7 @@ void pmerge(int *arr, int start, int mid, int end) {
             odds[j - 1 + size_odd_A] = B[i];
         }
     }
+    */
 
 
 
@@ -292,18 +321,20 @@ void pmergeSort(int *arr, int start, int end) {
 
 
 int main(int argc, char **argv){
-    if (argc < 2) {
-        printf("Usage: ./pmergeSort <size of array>\n");
+    if (argc < 3) {
+        printf("Usage: ./pmergeSort <size of array> <num_threads>\n");
         return 1;
     }
 
-    
 
     int SIZE = atoi(argv[1]);
     int *arr = malloc(SIZE * sizeof(int));
     for (int i = 0; i < SIZE; i++) {
         arr[i] = genrand64_int64() % INT32_MAX;
     }
+
+    int num_threads = atoi(argv[2]);
+    omp_set_num_threads(num_threads);
 
     // memcopy the array
     int *arr2 =  malloc(SIZE * sizeof(int));
@@ -346,7 +377,7 @@ int main(int argc, char **argv){
         }
     }
 
-    printf("array sorted: %s\n", sorted ? "true" : "false");
+    printf("parallel array sorted: %s\n", sorted ? "true" : "false");
     printf("parallel time: %f\n", parallel_end - parallel_start);
     /* End of parallel sort */
 
