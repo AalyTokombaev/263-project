@@ -39,21 +39,7 @@ void pmergeSort(int *arr, int start, int end) {
 }
 
 // I mean merge sort is quote simple
-int main(){
-    int arr[SIZE] = {1, 3, 2, 6, 4, 5, 8, 7, 10, 9, 12, 11, 14, 13, 16, 15};
 
-    printf("arr before sort: ");
-    printArray(arr, 0, SIZE);
-    printf("\n");
-
-    pmergeSort(arr, 0, SIZE - 1); // 13 because of 0 indexing, I'm so fuckign stupid
-    printf("this is in main: arr after sort: ");
-    printArray(arr, 0, SIZE);
-    printf("\n");
-    
-    return 0;
-
-}
 
 
 // p: start index, r = end index 
