@@ -135,7 +135,7 @@ int min(int a, int b){
     return b;
 }
 
-void pmerge(int *arr, int start, int mid, int end) {
+void pmerge(int *arr, int start, int mid, int end, int *temp) {
     // I think we'll have to pass in a shared array here to collet the results;
         
 
@@ -186,7 +186,8 @@ void pmerge(int *arr, int start, int mid, int end) {
     // No we can find the even a's and b's 
     int size_even = size_even_A + size_even_B;
 
-    int *evens = malloc((size_even) * sizeof(int*));
+   //int *evens = malloc((size_even) * sizeof(int*));
+   int *evens = temp;
 
     // int *even_A = malloc(size_even_A * sizeof(int*));
     // int *even_B = malloc(size_even_B * sizeof(int*));
@@ -195,7 +196,8 @@ void pmerge(int *arr, int start, int mid, int end) {
     int size_odd_B = size_B - size_even_B;
 
     int size_odd = size_odd_A + size_odd_B;
-    int *odds = malloc(size_odd * sizeof(int*));
+    //int *odds = malloc(size_odd * sizeof(int*));
+    int *odds = temp + size_even;
 
     // int *odd_A = malloc((size_A - size_even_A) * sizeof(int*));
     // int *odd_B = malloc((size_B - size_even_B) * sizeof(int*));
@@ -229,10 +231,12 @@ void pmerge(int *arr, int start, int mid, int end) {
 
     // merge evens and odds 
     int mi = size_even / 2;
-    pmerge(evens, 0, mi - 1, size_even - 1);
+    pmerge(evens, 0, mi, size_even - 1, temp);
 
-    mi = size_odd / 2;
-    pmerge(odds, 0 , mi - 1, size_odd - 1);
+    // mi = size_odd / 2;
+    mi = (3*size_even)/2;
+    // we know  that odds starts at index size even, and is of the same size...
+    pmerge(odds, size_even , mi , 2*size_even - 1, temp);
 
 
     if (size_even == 2 && size_odd == 2) {
@@ -256,7 +260,7 @@ void pmerge(int *arr, int start, int mid, int end) {
     arr[end] = odds[size_odd-1];
 }
 
-void pmergeSort(int *arr, int start, int end) {
+void pmergeSort(int *arr, int start, int end, int *temp) {
     if (start < end) {
         // find the middle and mergesort the left and right
         // int middle = start + (end - start) / 2;
@@ -265,10 +269,10 @@ void pmergeSort(int *arr, int start, int end) {
 
         // print start middle and end
         // printf("start: %d, middle: %d, end: %d\n", start, middle, end);
-        pmergeSort(arr, start, middle);
-        pmergeSort(arr, middle + 1, end);
+        pmergeSort(arr, start, middle, temp);
+        pmergeSort(arr, middle + 1, end, temp);
         // parallel region goes here ;) 
-        pmerge(arr, start, middle, end);
+        pmerge(arr, start, middle, end , temp);
     }
     
 }
@@ -323,7 +327,8 @@ int main(int argc, char **argv){
     /* Run the parallel sort */
 
     double parallel_start = omp_get_wtime();
-    pmergeSort(arr, 0, SIZE - 1);
+    int *temp = (int*)calloc(SIZE, sizeof(int));
+    pmergeSort(arr, 0, SIZE - 1, temp);
     double parallel_end = omp_get_wtime();
 
     bool sorted = true;
