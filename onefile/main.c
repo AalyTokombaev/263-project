@@ -2,8 +2,54 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>
+#include <stdbool.h>
+#include <string.h>
+#include "random.c"
 
-#define SIZE 16
+#define MAX_ARRAY_PRINT_SIZE 14
+
+
+
+
+/// @brief prints an array
+/// @param array array
+/// @param size size of array
+/// This function was provided Bendik Sperrevik for easier debugging.
+void printIntArray(int *array, int size)
+{
+    if(size == 0)
+        {
+            printf("[]\n");
+            return;
+        }
+    printf("[%3d", array[0]);
+
+    int end_print_f;
+    end_print_f = MAX_ARRAY_PRINT_SIZE;
+    size_t i;
+
+    if (size < MAX_ARRAY_PRINT_SIZE)
+        end_print_f = size;
+
+    for (i = 1; i < end_print_f; i++)
+    {
+        printf(", %3d", array[i]);
+    }
+
+    if (size > MAX_ARRAY_PRINT_SIZE)
+    {
+        printf(",\t...\t");
+
+        printf(", %3d]", array[size - 1]);
+    }
+    else
+    {
+        printf("]");
+    }
+
+    printf("\tlength %d\n", size);
+
+}
 
 void printArray(int *arr, int start, int end){
     for (int i = start; i < end; i++) {
@@ -182,6 +228,7 @@ void pmerge(int *arr, int start, int mid, int end) {
             odds[j - 1] = A[i];
         }
     }
+    
 
     j = 0;
     for (int i = 0; i < size_B; i++) {
@@ -212,13 +259,14 @@ void pmerge(int *arr, int start, int mid, int end) {
         return;
     }
     
-
+    #pragma omp for
     for (int i = 1; i < size_even; i++){
         int e = 2*i;
         int o = 2*i - 1;
         arr[start + e] = max(evens[i], odds[i - 1]);
         arr[start + o] = min(evens[i], odds[i - 1]);
     }
+    #pragma omp barrier
 
     arr[start] = evens[0];
     arr[end] = odds[size_odd-1];
@@ -243,18 +291,63 @@ void pmergeSort(int *arr, int start, int end) {
 
 
 
-int main(){
-    int arr[SIZE] = {1, 3, 2, 6, 4, 5, 8, 7, 10, 9, 12, 11, 14, 13, 16, 15};
+int main(int argc, char **argv){
+    if (argc < 2) {
+        printf("Usage: ./pmergeSort <size of array>\n");
+        return 1;
+    }
 
-    printf("arr before sort: ");
-    printArray(arr, 0, SIZE);
-    printf("\n");
-
-    pmergeSort(arr, 0, SIZE - 1); // 13 because of 0 indexing, I'm so fuckign stupid
-    printf("this is in main: arr after sort: ");
-    printArray(arr, 0, SIZE);
-    printf("\n");
     
-    return 0;
+
+    int SIZE = atoi(argv[1]);
+    int *arr = malloc(SIZE * sizeof(int));
+    for (int i = 0; i < SIZE; i++) {
+        arr[i] = genrand64_int64() % INT32_MAX;
+    }
+
+    // memcopy the array
+    int *arr2 =  malloc(SIZE * sizeof(int));
+    memcpy(arr2, arr, SIZE * sizeof(int));
+
+
+    /* Run the sequential sort */
+    double sequential_start = omp_get_wtime();
+    mergeSort(arr2, 0, SIZE - 1);
+    double sequential_end = omp_get_wtime();
+
+    // verify that the array is sorted
+    bool sorted2 = true;
+    for (int i = 0; i < SIZE - 1; i++) {
+        if (arr2[i] > arr2[i+1]) {
+            sorted2 = false;
+            break;
+        }
+    }
+    printf("sequential array sorted: %s\n", sorted2 ? "true" : "false");
+    printf("sequential time: %f\n", sequential_end - sequential_start);
+
+
+    /* End sequential run */
+
+
+    
+
+    /* Run the parallel sort */
+
+    double parallel_start = omp_get_wtime();
+    pmergeSort(arr, 0, SIZE - 1);
+    double parallel_end = omp_get_wtime();
+
+    bool sorted = true;
+    for (int i = 0; i < SIZE - 1; i++) {
+        if (arr[i] > arr[i+1]) {
+            sorted = false;
+            break;
+        }
+    }
+
+    printf("array sorted: %s\n", sorted ? "true" : "false");
+    printf("parallel time: %f\n", parallel_end - parallel_start);
+    /* End of parallel sort */
 
 }
