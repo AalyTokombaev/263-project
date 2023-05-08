@@ -168,23 +168,7 @@ void pmerge(int *arr, int start, int mid, int end) {
     }
 
     // now that we've done the base cases we should have two sorted arrays A and B 
-    int *A = (int *)malloc(size_A * sizeof(int));
-    int *B = (int *)malloc(size_B * sizeof(int));
-    
-    
-    int j = 0;
-    for (int i = start; i < mid + 1; i++) {
-        A[j] = arr[i];
-        j++;
-    }
-    j = 0;
-    for (int i = mid + 1; i < end + 1; i++) {
-        B[j] = arr[i];
-        j++;
-    }
 
-
-    // find even a_i and even b_i
     /* If the length of the array is odd, then the ammount of evens will be one larger than the ammount of odds */
     int size_even_A = size_A / 2;
     if (size_A % 2 != 0 && size_A != 2) {
@@ -219,7 +203,7 @@ void pmerge(int *arr, int start, int mid, int end) {
 
 
     // Fill up the odd and even arrays
-    j = 0;
+    int j = 0;
     for (int i = 0; i < size_A; i++) {
         if (i % 2 == 0) {
             evens[j] = arr[i];
